@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-formulario-reactivo',
@@ -8,16 +8,33 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './formulario-reactivo.css'
 })
 export class FormularioReactivo {
+  formulario: FormGroup;
+  listaCorreos: string[] = [];
 
-  formulario = new FormGroup({
-    nombre: new FormControl(''),
-    email: new FormControl('')
+constructor(private fb: FormBuilder){
+  this.formulario = this.fb.group({
+    nombre: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]]
   });
+}
+
+  /*formulario = new FormGroup({
+    nombre: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email])
+  });*/
 
   handleSubmit(){
     alert(
       this.formulario.value.nombre + ' | ' + this.formulario.value.email
     );
+  }
+
+  addEmail(){
+    if(this.formulario.value.email.trim() ){
+      this.listaCorreos.push(this.formulario.value.email.trim())
+      this.formulario.reset();
+    }
+    
   }
 
 }

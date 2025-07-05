@@ -1,14 +1,36 @@
 <p>formulario-reactivo works!</p>
-<form [formGroup]="formulario" (ngSubmit) = "handleSubmit()">
+<form [formGroup]="formulario" (ngSubmit)="addEmail()">
     <label>Nombre:
         <input type="text" formControlName="nombre"/>
     </label>
+    @if (formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid) {
+    <div>
+        <small> Nombre es obligatorio</small>        
+    </div>
+    }
     <label>Email:
         <input type="email" formControlName="email"/>
     </label>
-    <button type="submit">Guardar</button>
+     @if (formulario.get('email')?.touched && formulario.get('email')?.errors) {
+    <div>
+        @if (formulario.get('email')?.errors?.['required']) {
+        <small> Email es obligatorio</small>
+        }
+        @if (formulario.get('email')?.errors?.['email']) {
+        <small>Email invalido</small>
+        }
+    </div>
+    }
+    <button type="submit" [disabled] = !formulario.valid>Guardar</button>
 
     <h2>Formulario</h2>
     <p>Nombre: {{formulario.value.nombre}}</p>
     <p>Nombre: {{formulario.value.email}}</p>
+
+    <h2>Lista de Correos</h2>
+    @for(correo of listaCorreos; track correo){
+    <ul class="correo">    
+    <li>{{correo}}</li>
+    </ul>
+}
 </form>
